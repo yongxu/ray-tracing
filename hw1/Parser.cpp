@@ -9,7 +9,7 @@ std::istream &operator>>(std::istream  &input, Vec3 &v)
 }
 
 Parser::Parser(std::string fileName)
-	:inputFile{fileName},context{ std::make_shared<std::vector<std::unique_ptr<Shape>>>()}
+	:inputFile{fileName},context{ std::make_shared<std::vector<std::shared_ptr<Shape>>>()}
 {
 	for (std::string d; inputFile >> d;) {
 		if (d == "eye") {
@@ -24,7 +24,7 @@ Parser::Parser(std::string fileName)
 		else if (d == "fovh") {
 			inputFile >> fovh;
 			//convert to rad
-			fovh *= std::atan(1) * 4 / 180;
+			fovh *= static_cast<float>(std::atan(1) * 4 / 180);
 		}
 		else if (d == "imsize") {
 			inputFile >> width >> height;
@@ -44,7 +44,7 @@ Parser::Parser(std::string fileName)
 			float r;
 			inputFile >> center;
 			inputFile >> r;
-			context->push_back(std::make_unique<Sphere>(center, r, mtlcolor));
+			context->push_back(std::make_shared<Sphere>(center, r, mtlcolor));
 		}
 	}
 }

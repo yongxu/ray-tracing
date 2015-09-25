@@ -13,6 +13,7 @@ public:
 	Vec3 c;
 	Color color;
 	float r;
-	
+
+	float traceRay(const Vec3& ray, const Vec3& eye, Color& c) override;
 };
 

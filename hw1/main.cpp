@@ -1,17 +1,28 @@
 #include<iostream>
-
+#include<string>
 #include"numerics.h"
 #include"Parser.h"
 #include"Scene.h"
+#include"PPM.h"
 
-int main() {
-	Vec3 t{ 1,2,3 };
-	Vec3 t2{ 1,2,3 };
-	std::cout << "!!!!" << (t*t2).y << "\n";
+int main(int argc, char *argv[]) {
+	std::string input, output;
+	if (argc == 2) {
+		input = argv[1];
+		output = std::string(argv[1]) + ".ppm";
+	}
+	else if (argc == 3) {
+		input = argv[1];
+		output =argv[2];
+	}
+	else {
+		std::cout << "usage:" << "render " << "input" << " " << "output\n";
+		return -1;
+	}
 
-	Parser p("input3.txt");
+	Parser p(input);
 	Scene s(p);
-	auto ctx = p.getContext();
-	system("pause");
+	s.render();
+	PPM::generatePPM(s.view, s.width, s.height, output);
 	return 0;
 }

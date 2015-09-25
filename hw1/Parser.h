@@ -13,7 +13,7 @@ public:
 	Parser(std::string fileName);
 	~Parser();
 
-	std::shared_ptr<std::vector<std::unique_ptr<Shape>>> getContext() {
+	std::shared_ptr<std::vector<std::shared_ptr<Shape>>> getContext() {
 		return context;
 	}
 
@@ -24,7 +24,7 @@ public:
 	int width, height; //imsize
 	Color bkgcolor;
 	Color mtlcolor;
-	std::shared_ptr<std::vector<std::unique_ptr<Shape>>> context;
+	std::shared_ptr<std::vector<std::shared_ptr<Shape>>> context;
 private:
 	std::ifstream inputFile;
 };

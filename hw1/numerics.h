@@ -9,8 +9,8 @@ struct Vec3
 		this->y = y;
 		this->z = z;
 	}
-	inline Vec3 operator*(const Vec3& rhs) const {
-		return{ this->x*rhs.x,this->y*rhs.y,this->z*rhs.z };
+	inline float operator*(const Vec3& rhs) const {
+		return this->x*rhs.x + this->y*rhs.y + this->z*rhs.z;
 	}
 	inline Vec3 operator+(const Vec3& rhs) const {
 		return{ this->x+rhs.x,this->y+rhs.y,this->z+rhs.z };
@@ -19,6 +19,9 @@ struct Vec3
 		return{ this->x - rhs.x,this->y - rhs.y,this->z - rhs.z };
 	}
 	inline Vec3 operator*(const float& rhs) const {
+		return{ this->x*rhs,this->y*rhs,this->z*rhs };
+	}
+	inline Vec3 operator*(const int& rhs) const {
 		return{ this->x*rhs,this->y*rhs,this->z*rhs };
 	}
 	inline Vec3 operator/(const float& rhs) const {
@@ -35,6 +38,16 @@ struct Vec3
 				(this->z * rhs.x) - (this->x * rhs.z),
 				(this->x * rhs.y) - (this->y * rhs.x) };
 	}
+	inline float distanceSqare(const Vec3& rhs) const {
+		float dx = rhs.x - x;
+		float dy = rhs.y - y;
+		float dz = rhs.z - z;
+		return dx*dx + dy*dy + dz*dz;
+	}
+	inline float distance(const Vec3& rhs) const {
+		return distanceSqare(rhs);
+	}
+
 	inline float lengthSquare() const {
 		return x*x + y*y + z*z;
 	}
