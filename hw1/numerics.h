@@ -33,6 +33,9 @@ struct Vec3
 	inline Vec3 operator-(const float& rhs) const {
 		return{ this->x - rhs,this->y - rhs,this->z - rhs };
 	}
+	inline Vec3 operator-() const {
+		return{ -x,-y,-z };
+	}
 	inline Vec3 cross(const Vec3& rhs) const {
 		return{ (this->y * rhs.z) - (this->z * rhs.y),
 				(this->z * rhs.x) - (this->x * rhs.z),
@@ -62,6 +65,14 @@ struct Vec3
 	
 };
 
+struct Ray {
+	Vec3 dir;
+	Vec3 pos;
+	inline Vec3 reach(float t) const {
+		return pos + (dir*t);
+	}
+};
+
 struct Vec2
 {
 	float x, y;
@@ -81,43 +92,3 @@ struct Vec2
 
 using Point = Vec3;
 
-struct Color {
-	union {
-		unsigned int c;
-		struct {
-			unsigned char a;
-			unsigned char r;
-			unsigned char g;
-			unsigned char b;
-		};
-	};
-	Color() 
-		:a{ 255 }, r{ 0 }, g{ 0 }, b{ 0 }
-	{
-	}
-	Color(unsigned char a, unsigned char r, unsigned char g, unsigned char b) {
-		this->a = a;
-		this->r = r;
-		this->g = g;
-		this->b = b;
-	}
-
-	Color(unsigned char r, unsigned char g, unsigned char b) {
-		this->a = 255;
-		this->r = r;
-		this->g = g;
-		this->b = b;
-	}
-	Color(float a,float r, float g, float b) {
-		this->a = static_cast<unsigned char>(255 * a);
-		this->r = static_cast<unsigned char>(255 * r);
-		this->g = static_cast<unsigned char>(255 * g);
-		this->b = static_cast<unsigned char>(255 * b);
-	}
-	Color(float r, float g, float b) {
-		this->a = 255;
-		this->r = static_cast<unsigned char>(255 * r);
-		this->g = static_cast<unsigned char>(255 * g);
-		this->b = static_cast<unsigned char>(255 * b);
-	}
-};

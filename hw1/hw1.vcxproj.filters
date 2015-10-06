@@ -30,6 +30,9 @@
     <ClCompile Include="PPM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="numerics.h">
@@ -50,6 +53,12 @@
     <ClInclude Include="PPM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MaterialColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="input1.txt">
@@ -59,6 +68,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="input3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="debug.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

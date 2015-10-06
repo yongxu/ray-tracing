@@ -1,6 +1,7 @@
 #include "Parser.h"
 #include "Sphere.h"
 #include <cmath>
+#include <sstream>
 
 std::istream &operator>>(std::istream  &input, Vec3 &v)
 {
@@ -9,7 +10,8 @@ std::istream &operator>>(std::istream  &input, Vec3 &v)
 }
 
 Parser::Parser(std::string fileName)
-	:inputFile{fileName},context{ std::make_shared<std::vector<std::shared_ptr<Shape>>>()}
+	:inputFile{fileName},objects{ std::make_shared<std::vector<std::shared_ptr<Shape>>>()},
+	lights{ std::make_shared<std::vector<std::shared_ptr<Light>>>() }
 {
 	for (std::string d; inputFile >> d;) {
 		if (d == "eye") {
@@ -35,16 +37,43 @@ Parser::Parser(std::string fileName)
 			bkgcolor = Color(r, g, b);
 		}
 		else if (d == "mtlcolor") {
-			float r, g, b;
-			inputFile >> r >> g >> b;
-			mtlcolor = Color(r, g, b);
+			std::string argLine;
+			std::getline(inputFile, argLine);
+			std::stringstream argStream;
+			argStream << argLine;
+
+			float Od_r, Od_g, Od_b;
+			float Os_r, Os_g, Os_b;
+			float ka, kd, ks, n;
+
+			argStream >> Od_r >> Od_g >> Od_b
+				>> Os_r >> Os_g >> Os_b
+				>> ka >> kd >> ks >> n;
+			mtlcolor = MaterialColor(Color(Od_r, Od_g, Od_b), Color(Os_r, Os_g, Os_b), ka, kd, ks, n);
 		}
 		else if (d == "sphere") {
 			Vec3 center;
 			float r;
 			inputFile >> center;
 			inputFile >> r;
-			context->push_back(std::make_shared<Sphere>(center, r, mtlcolor));
+			objects->push_back(std::make_shared<Sphere>(center, r, mtlcolor));
+		}
+		else if (d == "light") {
+			float x, y, z, w, r, g, b;
+			inputFile >> x >> y >> z >> w >> r >> g >> b;
+			lights->push_back(std::make_shared<Light>(Vec3(x,y,z),w,Color(r,g,b)));
+		}
+		else if (d == "cylx") {
+			std::string argLine;
+			float y, z, r, xmin = 0, xmax = 0;
+			std::getline(inputFile,argLine);
+			std::stringstream argStream;
+			argStream << argLine;
+			argStream >> y >> z >> r >> xmin >> xmax;
+			if (xmin == xmax) {
+				std::cout << y << z << r << "\n";
+			}else
+				std::cout << y << z << r << xmin << xmax << "\n";
 		}
 	}
 }

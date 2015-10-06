@@ -17,8 +17,9 @@ private:
 	Vec3 updir;
 	float fovh;
 	Color bkgcolor;
-	Color mtlcolor;
-	std::shared_ptr<std::vector<std::shared_ptr<Shape>>> context;
+	//Color mtlcolor;
+	std::shared_ptr<std::vector<std::shared_ptr<Shape>>> objects;
+	std::shared_ptr<std::vector<std::shared_ptr<Light>>> lights;
 
 	float pixels_per_unit;
 	float pixel_size;
@@ -32,7 +33,7 @@ private:
 	Vec3 ul, ur, ll, lr;
 	//unit vector along view
 	Vec3 u, v;
-	Color traceRay(const Vec3& ray);
+	Color traceRay(const Ray& ray);
 
 };
 

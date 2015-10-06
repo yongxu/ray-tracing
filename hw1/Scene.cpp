@@ -5,11 +5,12 @@ using namespace std;
 
 Scene::Scene(const Parser & p,const float ppu)
 	:eye{p.eye},viewdir{p.viewdir.normlize()},updir{p.updir.normlize()},fovh{p.fovh},
-	 width{p.width},height{p.height},bkgcolor{p.bkgcolor},context{p.context},pixels_per_unit{ppu}
+	 width{p.width},height{p.height},bkgcolor{p.bkgcolor}, objects{ p.objects },
+	 lights{ p.lights }, pixels_per_unit{ppu}
 {
 	view = new Color[width*height];
-	u = viewdir.cross(updir);
-	v = u.cross(viewdir);
+	u = viewdir.cross(updir).normlize();
+	v = u.cross(viewdir).normlize();
 
 	//real width and hight calculated
 	w = width / pixels_per_unit;
@@ -37,33 +38,63 @@ Scene::~Scene()
 	delete[] view;
 }
 
-Color Scene::traceRay(const Vec3& ray)
+Color Scene::traceRay(const Ray& ray)
 {
 	//normalize ray
-	Vec3 d = ray.normlize();
-	Color c = bkgcolor;
-	float min = std::numeric_limits<float>::max();
-	for (auto shape : *context ) {
-		Color temp_c;
-		float t = shape->traceRay(d, eye, temp_c);
-		if (t > 0 && t < min) {
-			min = t;
-			c = temp_c;
+	float min_t = std::numeric_limits<float>::max();
+	Shape *closest = nullptr;
+	for (auto shape : *objects) {
+		float t = shape->hit(ray);
+		if (t > 0 && t < min_t) {
+			min_t = t;
+			closest = shape.get();
 		}
 	}
-	return c;
+	if (!closest) {
+		return bkgcolor;
+	}
+	//shading
+	Ray v = Ray{ -ray.dir, ray.reach(min_t) };
+	Vec3 n = closest->surfaceNormal(v);
+	Color Od = closest->color.Od;
+	Color Os = closest->color.Os;
+	float ka = closest->color.ka;
+	float kd = closest->color.kd;
+	float ks = closest->color.ks;
+	float n_s = closest->color.n;
+	Color L = Od*ka;
+	for (auto light : *lights) {
+		Vec3 l = light->direction(v.pos);
+		bool shadow = false;
+		for (auto shape : *objects) {
+			if (shape.get() == closest)
+				continue;
+			float t = shape->hit(Ray{l,v.pos});
+			if (light->isBlocked(v.pos,l,t)) {
+				shadow = true;
+				break;
+			}
+		}
+		if (shadow)
+			continue;
+		Vec3 h = (l + v.dir).normlize();
+		Color diffuse = Od*kd*std::fmaxf(0.f, n*l);
+		Color specular = Os*ks*std::powf(std::fmaxf(0.f, n*h),n_s);
+		L += light->color*(diffuse + specular);
+	}
+	return L.clamp();
 }
 
 Color * Scene::render()
 {
-	for (int i = 0; i < height;i++) {
-		for (int j = 0; j < width;j++) {
+	for (int i = 0; i < width;i++) {
+		for (int j = 0; j < height;j++) {
 			//calculate each pixel position in scene coordinate
 			Vec3 p = ul + u * i - v * j;
 			//calculate ray vector, from eye to view
 			Vec3 ray = p - eye;
 			//trace ray to find pixel color
-			view[i*height + j] = traceRay(ray);
+			view[j*height + i] = traceRay(Ray{ ray.normlize(),eye });
 		}
 	}
 	return view;
