@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-	inline const Vec3 & direction(Vec3 & from) const {
+	inline const Vec3 direction(Vec3 & from) const {
 		if (!w)
 			return (pos - from).normlize();
 		else
