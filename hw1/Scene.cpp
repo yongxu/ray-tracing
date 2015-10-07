@@ -78,8 +78,8 @@ Color Scene::traceRay(const Ray& ray)
 		if (shadow)
 			continue;
 		Vec3 h = (l + v.dir).normlize();
-		Color diffuse = Od*kd*std::fmaxf(0.f, n*l);
-		Color specular = Os*ks*std::powf(std::fmaxf(0.f, n*h),n_s);
+		Color diffuse = Od*kd*std::fmax(0.f, n*l);
+		Color specular = Os*ks*std::pow(std::fmax(0.f, n*h),n_s);
 		L += light->color*(diffuse + specular);
 	}
 	return L.clamp();
