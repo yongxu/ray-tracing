@@ -18,6 +18,6 @@ public:
 	float r2;
 
 	float hit(const Ray &ray) override;
-	const Vec3& surfaceNormal(const Ray &ray) override;
+	const Vec3 surfaceNormal(const Ray &ray) override;
 };
 

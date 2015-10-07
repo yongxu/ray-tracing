@@ -21,7 +21,7 @@ float Sphere::hit(const Ray &ray)
 	return -1.0;
 }
 
-const Vec3& Sphere::surfaceNormal(const Ray & ray)
+const Vec3 Sphere::surfaceNormal(const Ray & ray)
 {
 	return (ray.pos - center).normlize();
 }

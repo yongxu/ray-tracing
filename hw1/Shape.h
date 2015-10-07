@@ -11,7 +11,7 @@ public:
 	//if didn't hit or behind eye, return t<0
 	//ray: unit vector
 	virtual float hit(const Ray &ray) = 0;
-	virtual const Vec3& surfaceNormal(const Ray &ray) = 0;
+	virtual const Vec3 surfaceNormal(const Ray &ray) = 0;
 	MaterialColor color;
 };
 
