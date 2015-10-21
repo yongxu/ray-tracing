@@ -1,6 +1,6 @@
 #pragma once
 #include "numerics.h"
-#include"MaterialColor.h"
+#include"Color.h"
 class Shape
 {
 public:

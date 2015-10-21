@@ -1,5 +1,6 @@
 #include "PPM.h"
 #include <fstream>
+#include <sstream>
 
 void PPM::generatePPM(Color * image, int width, int height, std::string filename)
 {
@@ -16,4 +17,68 @@ void PPM::generatePPM(Color * image, int width, int height, std::string filename
 		file << "\n";
 	}
 	file.close();
+}
+
+Image * PPM::readPPM(std::string fileName)
+{
+	std::ifstream inputFile(fileName);
+	int width = 0, height = 0, colors = 0;
+	bool header = false;
+
+	Color* img = nullptr;
+	int index = 0;
+
+	while (!inputFile.eof()) {
+		inputFile >> std::ws;
+		std::string d;
+		if (inputFile.peek() == '#') {
+			inputFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		else if (!header) {
+			inputFile >> d;
+			if (d == "P3") {
+				header = true;
+				continue;
+			}
+			else {
+				return nullptr;
+			}
+		}
+		else if (!width) {
+			try {
+				inputFile >> width;
+			}
+			catch (...) {
+				return nullptr;
+			}
+		}
+		else if (!height) {
+			try {
+				inputFile >> height;
+			}
+			catch (...) {
+				return nullptr;
+			}
+		}
+		else if (!colors) {
+			try {
+				inputFile >> colors;
+				img = new Color[width*height];
+			}
+			catch (...) {
+				return nullptr;
+			}
+		}
+		else if(img){
+			//read color here
+			int r, g, b;
+			inputFile >> r >> g >> b;
+			
+			img[index++] = Color(r, g, b);
+
+		}
+	}
+
+	return new Image(img, width, height);
 }

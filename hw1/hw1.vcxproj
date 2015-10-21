@@ -131,20 +131,25 @@
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="MaterialColor.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="numerics.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="PPM.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="debug.txt" />
-    <Text Include="input1.txt" />
-    <Text Include="input2.txt" />
-    <Text Include="input3.txt" />
+    <Text Include="TestFiles\debug.txt" />
+    <Text Include="TestFiles\input1.txt" />
+    <Text Include="TestFiles\input2.txt" />
+    <Text Include="TestFiles\input3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\debug.ppm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

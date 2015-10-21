@@ -1,7 +1,7 @@
 #pragma once
 #include "Shape.h"
 #include"numerics.h"
-#include"MaterialColor.h"
+#include"Color.h"
 
 class Light
 {

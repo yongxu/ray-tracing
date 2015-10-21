@@ -5,7 +5,7 @@
 #include<memory>
 #include<vector>
 #include"numerics.h"
-#include"MaterialColor.h"
+#include"Color.h"
 #include"Shape.h"
 #include"Light.h"
 

@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\TestFiles">
+      <UniqueIdentifier>{d742e088-17c6-4317-b73d-b24d38d6a0b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{27bfedc0-c5d9-486a-82d3-0318cdc578f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,25 +59,36 @@
     <ClInclude Include="PPM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialColor.h">
+    <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="input1.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="TestFiles\debug.txt">
+      <Filter>Resource Files\TestFiles</Filter>
     </Text>
-    <Text Include="input2.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="TestFiles\input1.txt">
+      <Filter>Resource Files\TestFiles</Filter>
     </Text>
-    <Text Include="input3.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="TestFiles\input2.txt">
+      <Filter>Resource Files\TestFiles</Filter>
     </Text>
-    <Text Include="debug.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="TestFiles\input3.txt">
+      <Filter>Resource Files\TestFiles</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\debug.ppm">
+      <Filter>Resource Files\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>

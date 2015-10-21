@@ -28,6 +28,12 @@ struct Color {
 		this->g = static_cast<float>(g / 255.0);
 		this->b = static_cast<float>(b / 255.0);
 	}
+	Color(int r, int g, int b) {
+		this->a = 1;
+		this->r = static_cast<float>(r / 255.0);
+		this->g = static_cast<float>(g / 255.0);
+		this->b = static_cast<float>(b / 255.0);
+	}
 	Color(unsigned char a, unsigned char r, unsigned char g, unsigned char b) {
 		this->a = static_cast<float>(a / 255.0);
 		this->r = static_cast<float>(r / 255.0);
