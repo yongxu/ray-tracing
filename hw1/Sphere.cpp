@@ -25,3 +25,24 @@ const Vec3 Sphere::surfaceNormal(const Ray & ray)
 {
 	return (ray.pos - center).normlize();
 }
+
+const ColorIntrinsics& Sphere::getIntrinsics(const Ray & ray)
+{
+
+	Vec3 n = (ray.pos - center).normlize();
+	intrinsics.normal = n;
+	if (!texture) {
+		intrinsics.Od = materialColor.Od;
+		intrinsics.Os = materialColor.Os;
+	}
+	else {
+		float theta = std::atan2f(n.y , n.x);
+		float phi = std::acosf(n.z);
+		float u = theta / 2 / PI;
+		float v = phi / PI;
+		Color color = texture->getColor(u, v);
+		intrinsics.Od = color;
+		intrinsics.Os = color;
+	}
+	return intrinsics;
+}

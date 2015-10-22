@@ -92,3 +92,4 @@ struct Vec2
 
 using Point = Vec3;
 
+const float PI = 3.141592653589793238462643383279502884f;

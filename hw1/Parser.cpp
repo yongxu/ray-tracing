@@ -11,7 +11,8 @@ std::istream &operator>>(std::istream  &input, Vec3 &v)
 
 Parser::Parser(std::string fileName)
 	:inputFile{fileName},objects{ std::make_shared<std::vector<std::shared_ptr<Shape>>>()},
-	lights{ std::make_shared<std::vector<std::shared_ptr<Light>>>() }
+	lights{ std::make_shared<std::vector<std::shared_ptr<Light>>>() },
+	textures{ std::make_shared<std::map<std::string,std::shared_ptr<Texture>>>() }
 {
 	for (std::string d; inputFile >> d;) {
 		if (d == "eye") {
@@ -56,7 +57,12 @@ Parser::Parser(std::string fileName)
 			float r;
 			inputFile >> center;
 			inputFile >> r;
-			objects->push_back(std::make_shared<Sphere>(center, r, mtlcolor));
+			std::shared_ptr<Sphere> sphere;
+			if(!currentTexture)
+				sphere = std::make_shared<Sphere>(center, r, mtlcolor);
+			else
+				sphere = std::make_shared<Sphere>(center, r, mtlcolor,currentTexture);
+			objects->push_back(sphere);
 		}
 		else if (d == "light") {
 			float x, y, z, w, r, g, b;
@@ -70,10 +76,23 @@ Parser::Parser(std::string fileName)
 			std::stringstream argStream;
 			argStream << argLine;
 			argStream >> y >> z >> r >> xmin >> xmax;
+			//TODO
 			if (xmin == xmax) {
 				std::cout << y << z << r << "\n";
 			}else
 				std::cout << y << z << r << xmin << xmax << "\n";
+		}
+		else if (d == "texture") {
+			std::string name;
+			inputFile >> name;
+			Image* tx = PPM::readPPM(name);
+			if (tx) {
+				currentTexture = std::make_shared<Texture>(tx->image, tx->width, tx->height);
+				(*textures)[name] = currentTexture;
+			}
+			else {
+				currentTexture.reset();
+			}
 		}
 	}
 }

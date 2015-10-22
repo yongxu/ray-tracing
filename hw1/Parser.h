@@ -4,10 +4,14 @@
 #include<iostream>
 #include<memory>
 #include<vector>
+#include<map>
 #include"numerics.h"
 #include"Color.h"
 #include"Shape.h"
 #include"Light.h"
+#include"Texture.h"
+#include"Image.h"
+#include"PPM.h"
 
 class Parser
 {
@@ -26,8 +30,10 @@ public:
 	int width, height; //imsize
 	Color bkgcolor;
 	MaterialColor mtlcolor;
+	std::shared_ptr<Texture> currentTexture;
 	std::shared_ptr<std::vector<std::shared_ptr<Shape>>> objects;
 	std::shared_ptr<std::vector<std::shared_ptr<Light>>> lights;
+	std::shared_ptr<std::map<std::string, std::shared_ptr<Texture>>> textures;
 private:
 	std::ifstream inputFile;
 };

@@ -1,6 +1,7 @@
 #include "PPM.h"
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 void PPM::generatePPM(Color * image, int width, int height, std::string filename)
 {
@@ -22,6 +23,10 @@ void PPM::generatePPM(Color * image, int width, int height, std::string filename
 Image * PPM::readPPM(std::string fileName)
 {
 	std::ifstream inputFile(fileName);
+	if (inputFile.bad()) {
+		std::cout << "texture file:" << fileName << " invalid" << std::endl;
+	}
+
 	int width = 0, height = 0, colors = 0;
 	bool header = false;
 
@@ -39,11 +44,8 @@ Image * PPM::readPPM(std::string fileName)
 			inputFile >> d;
 			if (d == "P3") {
 				header = true;
-				continue;
 			}
-			else {
-				return nullptr;
-			}
+			continue;
 		}
 		else if (!width) {
 			try {
@@ -74,11 +76,14 @@ Image * PPM::readPPM(std::string fileName)
 			//read color here
 			int r, g, b;
 			inputFile >> r >> g >> b;
-			
-			img[index++] = Color(r, g, b);
+			if(index<width*height)
+				img[index++] = Color(r, g, b);
 
 		}
 	}
-
+	inputFile.close();
+	if (!img) {
+		return nullptr;
+	}
 	return new Image(img, width, height);
 }

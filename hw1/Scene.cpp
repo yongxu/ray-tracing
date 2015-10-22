@@ -6,7 +6,7 @@ using namespace std;
 Scene::Scene(const Parser & p,const float ppu)
 	:eye{p.eye},viewdir{p.viewdir.normlize()},updir{p.updir.normlize()},fovh{p.fovh},
 	 width{p.width},height{p.height},bkgcolor{p.bkgcolor}, objects{ p.objects },
-	 lights{ p.lights }, pixels_per_unit{ppu}
+	 lights{ p.lights }, textures{p.textures}, pixels_per_unit{ppu}
 {
 	view = new Color[width*height];
 	u = viewdir.cross(updir).normlize();
@@ -55,14 +55,16 @@ Color Scene::traceRay(const Ray& ray)
 	}
 	//shading
 	Ray v = Ray{ -ray.dir, ray.reach(min_t) };
-	Vec3 n = closest->surfaceNormal(v);
-	Color Od = closest->color.Od;
-	Color Os = closest->color.Os;
-	float ka = closest->color.ka;
-	float kd = closest->color.kd;
-	float ks = closest->color.ks;
-	float n_s = closest->color.n;
+	ColorIntrinsics intrinsics = closest->getIntrinsics(v);
+	Color Od = intrinsics.Od;
+	Color Os = intrinsics.Os;
+	float ka = intrinsics.ka;
+	float kd = intrinsics.kd;
+	float ks = intrinsics.ks;
+	float n_s = intrinsics.n;
+	Vec3 n = intrinsics.normal;
 	Color L = Od*ka;
+
 	for (auto light : *lights) {
 		Vec3 l = light->direction(v.pos);
 		bool shadow = false;
@@ -82,6 +84,7 @@ Color Scene::traceRay(const Ray& ray)
 		Color specular = Os*ks*std::pow(std::fmax(0.f, n*h),n_s);
 		L += light->color*(diffuse + specular);
 	}
+
 	return L.clamp();
 }
 

@@ -7,9 +7,6 @@
 
 int main(int argc, char *argv[]) {
 
-	Image* s = PPM::readPPM("./Textures/debug.ppm");
-	PPM::generatePPM(s->image, s->width, s->height, "./OutputImage/debugoutput.ppm");
-	/*
 	std::string input, output;
 	if (argc == 2) {
 		input = argv[1];
@@ -28,6 +25,6 @@ int main(int argc, char *argv[]) {
 	Scene s(p);
 	s.render();
 	PPM::generatePPM(s.view, s.width, s.height, output);
-	*/
+
 	return 0;
 }

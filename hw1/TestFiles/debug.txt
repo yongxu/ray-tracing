@@ -1,6 +1,6 @@
-eye  0 0 20
-viewdir 0 0 -1
-updir 0 1 0
+eye  0 20 0
+viewdir 0 -1 0
+updir 0 1 0.1
 fovh 30
 
 light -10 0 0 0 1 1 1
@@ -12,6 +12,7 @@ imsize 300 300
 bkgcolor 0 0 0
 
 mtlcolor 0 1 0  1 1 0  0.2 0.4 0.4 20
+texture cat.ppm
 sphere -3 0 0 1
-mtlcolor 1 0 0  1 1 0  0.2 0.4 0.4 20
+
 sphere 3 0 0 2

@@ -16,9 +16,6 @@
     <Filter Include="Resource Files\TestFiles">
       <UniqueIdentifier>{d742e088-17c6-4317-b73d-b24d38d6a0b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Textures">
-      <UniqueIdentifier>{27bfedc0-c5d9-486a-82d3-0318cdc578f3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -37,6 +34,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorIntrinsics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,6 +71,9 @@
     <ClInclude Include="Color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ColorIntrinsics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestFiles\debug.txt">
@@ -87,8 +90,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\debug.ppm">
-      <Filter>Resource Files\Textures</Filter>
-    </None>
+    <None Include="cat.ppm" />
   </ItemGroup>
 </Project>

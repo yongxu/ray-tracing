@@ -20,6 +20,7 @@ private:
 	//Color mtlcolor;
 	std::shared_ptr<std::vector<std::shared_ptr<Shape>>> objects;
 	std::shared_ptr<std::vector<std::shared_ptr<Light>>> lights;
+	std::shared_ptr<std::map<std::string, std::shared_ptr<Texture>>> textures;
 
 	float pixels_per_unit;
 	float pixel_size;
