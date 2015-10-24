@@ -18,8 +18,8 @@ struct Texture
 	}
 
 	const Color getColor(float u, float v) {
-		int w = static_cast<int>(std::fmodf(std::fmodf(u, 1.0) + 1.0f, 1.0f)*width);
-		int h = static_cast<int>(std::fmodf(std::fmodf(v, 1.0) + 1.0f, 1.0f)*height);
+		int w = static_cast<int>(std::fmod(std::fmod(u, 1.0) + 1.0f, 1.0f)*width);
+		int h = static_cast<int>(std::fmod(std::fmod(v, 1.0) + 1.0f, 1.0f)*height);
 
 		int index = width*h + w;
 
