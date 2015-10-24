@@ -2,6 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <limits>
+#include <cmath>
 
 void PPM::generatePPM(Color * image, int width, int height, std::string filename)
 {
