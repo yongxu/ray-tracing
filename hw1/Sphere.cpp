@@ -33,7 +33,6 @@ const ColorIntrinsics& Sphere::getIntrinsics(const Ray & ray)
 	intrinsics.normal = n;
 	if (!texture) {
 		intrinsics.Od = materialColor.Od;
-		intrinsics.Os = materialColor.Os;
 	}
 	else {
 		float theta = std::atan2f(n.y , n.x);
@@ -42,7 +41,6 @@ const ColorIntrinsics& Sphere::getIntrinsics(const Ray & ray)
 		float v = phi / PI;
 		Color color = texture->getColor(u, v);
 		intrinsics.Od = color;
-		intrinsics.Os = color;
 	}
 	return intrinsics;
 }

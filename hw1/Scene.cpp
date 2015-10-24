@@ -6,7 +6,7 @@ using namespace std;
 Scene::Scene(const Parser & p,const float ppu)
 	:eye{p.eye},viewdir{p.viewdir.normlize()},updir{p.updir.normlize()},fovh{p.fovh},
 	 width{p.width},height{p.height},bkgcolor{p.bkgcolor}, objects{ p.objects },
-	 lights{ p.lights }, textures{p.textures}, pixels_per_unit{ppu}
+	lights{ p.lights }, textures{ p.textures }, parallel{ p.parallel }, pixels_per_unit{ ppu }
 {
 	view = new Color[width*height];
 	u = viewdir.cross(updir).normlize();
@@ -22,6 +22,10 @@ Scene::Scene(const Parser & p,const float ppu)
 	d = w / 2 / tan(fovh / 2);
 
 	aspectRatio = w / h;
+
+	if (parallel) {
+		d = 0;
+	}
 
 	fovv = 2 * atan2(w / 2, d);
 	viewCenter = eye + viewdir * d;
@@ -90,14 +94,24 @@ Color Scene::traceRay(const Ray& ray)
 
 Color * Scene::render()
 {
-	for (int i = 0; i < width;i++) {
-		for (int j = 0; j < height;j++) {
-			//calculate each pixel position in scene coordinate
-			Vec3 p = ul + u * i - v * j;
-			//calculate ray vector, from eye to view
-			Vec3 ray = p - eye;
-			//trace ray to find pixel color
-			view[j*height + i] = traceRay(Ray{ ray.normlize(),eye });
+	if (parallel){
+		for (int i = 0; i < width;i++) {
+			for (int j = 0; j < height;j++) {
+				Vec3 p = ul + u * i - v * j;
+				view[j*height + i] = traceRay(Ray{ viewdir,p });
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < width;i++) {
+			for (int j = 0; j < height;j++) {
+				//calculate each pixel position in scene coordinate
+				Vec3 p = ul + u * i - v * j;
+				//calculate ray vector, from eye to view
+				Vec3 ray = p - eye;
+				//trace ray to find pixel color
+				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye });
+			}
 		}
 	}
 	return view;

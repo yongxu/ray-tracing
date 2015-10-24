@@ -29,6 +29,7 @@ private:
 	Vec3 viewCenter;
 	float d; //eye to view distance
 	float aspectRatio;
+	bool parallel;
 
 	//upper left, upper right, lower left, lower right of view
 	Vec3 ul, ur, ll, lr;

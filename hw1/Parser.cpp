@@ -2,6 +2,8 @@
 #include "Sphere.h"
 #include <cmath>
 #include <sstream>
+#include <regex>
+#include"Triangle.h"
 
 std::istream &operator>>(std::istream  &input, Vec3 &v)
 {
@@ -64,6 +66,81 @@ Parser::Parser(std::string fileName)
 				sphere = std::make_shared<Sphere>(center, r, mtlcolor,currentTexture);
 			objects->push_back(sphere);
 		}
+		else if (d == "v") {
+			float x, y, z;
+			inputFile >> x >> y >> z;
+			vertices.push_back(Vec3(x, y, z));
+		}
+		else if (d == "vt") {
+			float x, y;
+			inputFile >> x >> y;
+			vertices_t.push_back(Vec2(x, y));
+		}
+		else if (d == "vn") {
+			float x, y, z;
+			inputFile >> x >> y >> z;
+			vertices.push_back(Vec3(x, y, z));
+		}
+		else if (d == "f") {
+			std::string line;
+			std::getline(inputFile, line);
+			std::regex v("([0-9]+)\\s([0-9]+)\\s([0-9]+)");
+			std::regex v_vt("([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)");
+			std::regex v_vn("([0-9]+)//([0-9]+)\\s([0-9]+)//([0-9]+)\\s([0-9]+)//([0-9]+)");
+			std::regex v_vt_vn("([0-9]+)/([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)/([0-9]+)");
+			
+			std::smatch results;
+			if (std::regex_search(line, results, v)) {
+				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
+
+				Vec3 v2 = vertices[std::stoi(results[2]) - 1];
+
+				Vec3 v3 = vertices[std::stoi(results[3]) - 1];
+
+				objects->push_back(std::make_shared<Triangle>(v1, v2, v3, mtlcolor));
+			}
+			else if (std::regex_search(line, results, v_vt)) {
+				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
+				Vec2 vt1 = vertices_t[std::stoi(results[2]) - 1];
+
+				Vec3 v2 = vertices[std::stoi(results[3]) - 1];
+				Vec2 vt2 = vertices_t[std::stoi(results[4]) - 1];
+
+				Vec3 v3 = vertices[std::stoi(results[5]) - 1];
+				Vec2 vt3 = vertices_t[std::stoi(results[6]) - 1];
+
+				objects->push_back(std::make_shared<Triangle>(v1,v2,v3,vt1,vt2,vt3,mtlcolor, currentTexture));
+			}
+			else if (std::regex_search(line, results, v_vn)) {
+				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
+				Vec3 vn1 = vertices_n[std::stoi(results[2]) - 1];
+
+				Vec3 v2 = vertices[std::stoi(results[3]) - 1];
+				Vec3 vn2 = vertices_n[std::stoi(results[4]) - 1];
+
+				Vec3 v3 = vertices[std::stoi(results[5]) - 1];
+				Vec3 vn3 = vertices_n[std::stoi(results[6]) - 1];
+
+				objects->push_back(std::make_shared<Triangle>(v1, v2, v3, vn1, vn2, vn3, mtlcolor));
+			}
+			else if (std::regex_search(line, results, v_vt_vn)) {
+				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
+				Vec2 vt1 = vertices_t[std::stoi(results[2]) - 1];
+				Vec3 vn1 = vertices_n[std::stoi(results[3]) - 1];
+
+				Vec3 v2 = vertices[std::stoi(results[4]) - 1];
+				Vec2 vt2 = vertices_t[std::stoi(results[5]) - 1];
+				Vec3 vn2 = vertices_n[std::stoi(results[6]) - 1];
+
+				Vec3 v3 = vertices[std::stoi(results[7]) - 1];
+				Vec2 vt3 = vertices_t[std::stoi(results[8]) - 1];
+				Vec3 vn3 = vertices_n[std::stoi(results[9]) - 1];
+
+				objects->push_back(std::make_shared<Triangle>(v1, v2, v3, vt1, vt2, vt3, vn1, vn2, vn3, mtlcolor, currentTexture));
+
+			}
+
+		}
 		else if (d == "light") {
 			float x, y, z, w, r, g, b;
 			inputFile >> x >> y >> z >> w >> r >> g >> b;
@@ -93,6 +170,9 @@ Parser::Parser(std::string fileName)
 			else {
 				currentTexture.reset();
 			}
+		}
+		else if (d == "parallel") {
+			parallel = true;
 		}
 	}
 }

@@ -1,28 +1,38 @@
-eye  -2 4 10
-viewdir 0.25 -.25 -1
+eye  9 7 15
+viewdir -0.8 -.1 -1
 updir 0 1 0
+fovh 30
 
-fovh 70
-imsize 640 480 
+light .5 -1 -1 1 1 1 1
 
-light 0 -1 0 0 1 1 1
-light 0 -1 0 1 1 1 1
-light 0 4 4 0 1 1 1
+imsize 300 300
 
-bkgcolor 0.4 0.4 0.4 
-
-mtlcolor 0 1 0  1 1 1  0.2 0.3 0.4 20
-sphere 0 1.7 2 .75
-
-mtlcolor 1 1 0  1 1 1  0.2 0.3 0.4 20
-sphere -0.55 2.5 1.5 .25
-
-mtlcolor 0 0 1  1 1 1  0.2 0.3 0.3 20
-sphere -.5 2 0 .5
-
-mtlcolor 1 0 0  1 1 1  0.2 0.3 0.2 20
-sphere 0 0 -3 3
+bkgcolor .6 .9 1
 
 
-mtlcolor 1 1 1  1 1 1  0.2 0.3 0.2 20
-sphere 4 -4 -3 2
+
+mtlcolor 1 1 1  1 1 1  0.4 1 .1  20
+
+
+
+v -6 0 -6
+v -6 10 -6
+v -6 0 -16
+v -6 10 -16
+v -16 0 -6
+v -16 10 -6
+
+vt 0 4
+vt 4 4
+vt 4 0
+vt 0 0
+
+
+
+texture cat.ppm
+
+f 1/1 4/3 2/4
+f 1/1 3/2 4/3
+f 1/2 2/3 6/4
+f 1/2 6/4 5/1
+

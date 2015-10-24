@@ -88,8 +88,12 @@ struct Vec2
 	inline Vec2 operator+(const float& rhs) {
 		return{ this->x + rhs,this->y + rhs };
 	}
+	Vec2(float x, float y) {
+		this->x = x;
+		this->y = y;
+	}
+	Vec2() :Vec2(0, 0) {}
 };
 
-using Point = Vec3;
 
 const float PI = 3.141592653589793238462643383279502884f;

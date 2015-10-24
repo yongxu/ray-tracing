@@ -17,7 +17,7 @@ struct ColorIntrinsics
 	{
 	}
 	ColorIntrinsics(const MaterialColor color,Vec3 normal)
-		: Od{ color.Od }, Os{ color.Os }, ka{ color.ka }, kd{ color.kd }, ks{ color.ks }, n{ color.n }
+		: Od{ color.Od }, Os{ color.Os }, ka{ color.ka }, kd{ color.kd }, ks{ color.ks }, n{ color.n }, normal(normal)
 	{
 	}
 };

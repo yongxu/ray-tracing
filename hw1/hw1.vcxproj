@@ -130,6 +130,7 @@
     <ClCompile Include="PPM.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorIntrinsics.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestFiles\debug.txt" />
