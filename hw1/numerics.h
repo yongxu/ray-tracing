@@ -51,11 +51,11 @@ struct Vec3
 		return distanceSqare(rhs);
 	}
 
-	inline float lengthSquare() const {
+	inline float quadrance() const {
 		return x*x + y*y + z*z;
 	}
 	inline float length() const {
-		return std::sqrt(lengthSquare());
+		return std::sqrt(quadrance());
 	}
 	inline Vec3 normlize() const {
 		float len = length();

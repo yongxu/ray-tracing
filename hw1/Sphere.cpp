@@ -11,7 +11,7 @@ float Sphere::hit(const Ray &ray)
 	Vec3 r2eye = ray.pos - center;
 	//a = 1
 	float b = (ray.dir*r2eye) * 2;
-	float c = r2eye.lengthSquare() - r2;
+	float c = r2eye.quadrance() - r2;
 	float delta2 = b*b - 4 * c;
 	//std::cout << ray.x<<" "<< ray.y << " " << ray.z << " " << "\n";
 

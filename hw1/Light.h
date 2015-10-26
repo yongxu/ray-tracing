@@ -21,7 +21,7 @@ public:
 		if (w && distance>0)
 			return true;
 		else if (distance > 0 &&
-			(from + direction*distance).lengthSquare() < (pos - from).lengthSquare())
+			(from + direction*distance).quadrance() < (pos - from).quadrance())
 			return true;
 		else
 			return false;
