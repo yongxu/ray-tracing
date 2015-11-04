@@ -11,13 +11,13 @@ public:
 	{
 	}
 
-	inline const Vec3 direction(Vec3 & from) const {
+	inline const Vec3 direction(const Vec3 & from) const {
 		if (!w)
 			return (pos - from).normlize();
 		else
 			return pos.normlize();
 	}
-	inline bool isBlocked(Vec3 & from, Vec3 & direction,float distance) const {
+	inline bool isBlocked(const Vec3 & from,const Vec3 & direction,const float distance) const {
 		if (w && distance>0)
 			return true;
 		else if (distance > 0 &&

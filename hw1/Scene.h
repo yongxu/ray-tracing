@@ -3,8 +3,8 @@
 class Scene
 {
 public:
-	Scene(const Parser &p):Scene(p, 1) {} //default pixels_per_unit
-	Scene(const Parser &,const float);
+	Scene(const Parser &p):Scene(p, 1, 2) {} //default pixels_per_unit
+	Scene(const Parser &, const float, const int rayBounceTimes);
 	~Scene();
 
 	int width, height; //imsize
@@ -31,11 +31,12 @@ private:
 	float aspectRatio;
 	bool parallel;
 
+	int rayBounceTimes;
 	//upper left, upper right, lower left, lower right of view
 	Vec3 ul, ur, ll, lr;
 	//unit vector along view
 	Vec3 u, v;
-	Color traceRay(const Ray& ray);
+	Color traceRay(const Ray& ray, int iteration = 0);
 
 };
 

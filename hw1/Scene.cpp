@@ -3,10 +3,11 @@
 #include <limits>
 using namespace std;
 
-Scene::Scene(const Parser & p,const float ppu)
+Scene::Scene(const Parser & p,const float ppu, const int rayBounceTimes)
 	:eye{p.eye},viewdir{p.viewdir.normlize()},updir{p.updir.normlize()},fovh{p.fovh},
 	 width{p.width},height{p.height},bkgcolor{p.bkgcolor}, objects{ p.objects },
-	lights{ p.lights }, textures{ p.textures }, parallel{ p.parallel }, pixels_per_unit{ ppu }
+	lights{ p.lights }, textures{ p.textures }, parallel{ p.parallel }, pixels_per_unit{ ppu },
+	rayBounceTimes{rayBounceTimes}
 {
 	view = new Color[width*height];
 	u = viewdir.cross(updir).normlize();
@@ -42,7 +43,7 @@ Scene::~Scene()
 	delete[] view;
 }
 
-Color Scene::traceRay(const Ray& ray)
+Color Scene::traceRay(const Ray& ray, int iteration)
 {
 	//normalize ray
 	float min_t = std::numeric_limits<float>::max();
@@ -55,10 +56,10 @@ Color Scene::traceRay(const Ray& ray)
 		}
 	}
 	if (!closest) {
-		return bkgcolor;
+		return iteration == rayBounceTimes ? bkgcolor : Color(0,0,0);
 	}
 	//shading
-	Ray v = Ray{ -ray.dir, ray.reach(min_t) };
+	const Ray v = Ray{ -ray.dir, ray.reach(min_t) };
 	ColorIntrinsics intrinsics = closest->getIntrinsics(v);
 	Color Od = intrinsics.Od;
 	Color Os = intrinsics.Os;
@@ -66,7 +67,9 @@ Color Scene::traceRay(const Ray& ray)
 	float kd = intrinsics.kd;
 	float ks = intrinsics.ks;
 	float n_s = intrinsics.n;
-	Vec3 n = intrinsics.normal;
+	float alpha = intrinsics.alpha;
+	float eta = intrinsics.eta;
+	const Vec3 n = intrinsics.normal;
 	Color L = Od*ka;
 
 	for (auto light : *lights) {
@@ -88,8 +91,14 @@ Color Scene::traceRay(const Ray& ray)
 		Color specular = Os*ks*std::pow(std::fmax(0.f, n*h),n_s);
 		L += light->color*(diffuse + specular);
 	}
-
-	return L.clamp();
+	if (iteration) {
+		Color R = traceRay(Ray{ v.dir.reflect(n) , v.pos }, iteration -1);
+		float cos_theta = std::fmax(0.f, v.dir*n);
+		float F_r = eta + (1 - eta)*std::pow(1.0f - cos_theta, 5.0f);
+		//std::cout << eta <<" " << cos_theta << " " << "\n";
+		L += R * F_r;
+	}
+	return L;
 }
 
 Color * Scene::render()
@@ -110,7 +119,7 @@ Color * Scene::render()
 				//calculate ray vector, from eye to view
 				Vec3 ray = p - eye;
 				//trace ray to find pixel color
-				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye });
+				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye }, rayBounceTimes).clamp();
 			}
 		}
 	}

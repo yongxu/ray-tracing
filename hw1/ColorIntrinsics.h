@@ -13,11 +13,11 @@ struct ColorIntrinsics
 	{
 	}
 	ColorIntrinsics(const MaterialColor color)
-		: Od{ color.Od }, Os{ color.Os }, ka{ color.ka }, kd{ color.kd }, ks{ color.ks }, n{ color.n }, alpha{ alpha }, eta{ eta }
+		: Od{ color.Od }, Os{ color.Os }, ka{ color.ka }, kd{ color.kd }, ks{ color.ks }, n{ color.n }, alpha{ color.alpha }, eta{ color.eta }
 	{
 	}
 	ColorIntrinsics(const MaterialColor color,Vec3 normal)
-		: Od{ color.Od }, Os{ color.Os }, ka{ color.ka }, kd{ color.kd }, ks{ color.ks }, n{ color.n }, alpha{ alpha }, eta{ eta }, normal(normal)
+		: Od{ color.Od }, Os{ color.Os }, ka{ color.ka }, kd{ color.kd }, ks{ color.ks }, n{ color.n }, alpha{ color.alpha }, eta{ color.eta }, normal(normal)
 	{
 	}
 };

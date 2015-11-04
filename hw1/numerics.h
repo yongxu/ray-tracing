@@ -62,6 +62,11 @@ struct Vec3
 
 		return len ? *this / len : Vec3{0, 0, 0};
 	}
+
+	inline Vec3 reflect(const Vec3& n) const {
+		//2(alpha*N)-I, alpha = N*I
+		return n * ((*this) * n) * 2 - (*this);
+	}
 	
 };
 
