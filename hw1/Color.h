@@ -73,10 +73,10 @@ struct MaterialColor
 {
 	Color Od;
 	Color Os;
-	float ka, kd, ks, n;
+	float ka, kd, ks, n, alpha, eta;
 	MaterialColor() {};
-	MaterialColor(Color Od,Color Os,float ka,float kd,float ks,float n)
-		: Od{Od}, Os{Os}, ka{ka}, kd{kd}, ks{ks}, n{n}
+	MaterialColor(Color Od,Color Os,float ka,float kd,float ks,float n, float alpha, float eta)
+		: Od{Od}, Os{Os}, ka{ka}, kd{kd}, ks{ks}, n{n}, alpha{alpha}, eta{eta}
 	{
 	}
 

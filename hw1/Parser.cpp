@@ -5,6 +5,10 @@
 #include <regex>
 #include"Triangle.h"
 
+int matchToInt(std::sub_match<std::string::const_iterator> m) {
+	return std::stoi(std::string(m.first, m.second));
+}
+
 std::istream &operator>>(std::istream  &input, Vec3 &v)
 {
 	input >> v.x >> v.y >> v.z;
@@ -47,12 +51,12 @@ Parser::Parser(std::string fileName)
 
 			float Od_r, Od_g, Od_b;
 			float Os_r, Os_g, Os_b;
-			float ka, kd, ks, n;
+			float ka, kd, ks, n, alpha, eta;
 
 			argStream >> Od_r >> Od_g >> Od_b
 				>> Os_r >> Os_g >> Os_b
-				>> ka >> kd >> ks >> n;
-			mtlcolor = MaterialColor(Color(Od_r, Od_g, Od_b), Color(Os_r, Os_g, Os_b), ka, kd, ks, n);
+				>> ka >> kd >> ks >> n >> alpha >> eta;
+			mtlcolor = MaterialColor(Color(Od_r, Od_g, Od_b), Color(Os_r, Os_g, Os_b), ka, kd, ks, n, alpha, eta);
 		}
 		else if (d == "sphere") {
 			Vec3 center;
@@ -79,62 +83,62 @@ Parser::Parser(std::string fileName)
 		else if (d == "vn") {
 			float x, y, z;
 			inputFile >> x >> y >> z;
-			vertices.push_back(Vec3(x, y, z));
+			vertices_n.push_back(Vec3(x, y, z));
 		}
 		else if (d == "f") {
 			std::string line;
 			std::getline(inputFile, line);
-			std::regex v("([0-9]+)\\s([0-9]+)\\s([0-9]+)");
-			std::regex v_vt("([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)");
-			std::regex v_vn("([0-9]+)//([0-9]+)\\s([0-9]+)//([0-9]+)\\s([0-9]+)//([0-9]+)");
-			std::regex v_vt_vn("([0-9]+)/([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)/([0-9]+)");
+			std::regex v("([0-9]+)\\s([0-9]+)\\s([0-9]+)", std::regex_constants::ECMAScript | std::regex_constants::icase);
+			std::regex v_vt("([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)", std::regex_constants::ECMAScript | std::regex_constants::icase);
+			std::regex v_vn("([0-9]+)//([0-9]+)\\s([0-9]+)//([0-9]+)\\s([0-9]+)//([0-9]+)", std::regex_constants::ECMAScript | std::regex_constants::icase);
+			std::regex v_vt_vn("([0-9]+)/([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)/([0-9]+)\\s([0-9]+)/([0-9]+)/([0-9]+)", std::regex_constants::ECMAScript | std::regex_constants::icase);
 			
 			std::smatch results;
 			if (std::regex_search(line, results, v)) {
-				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
+				Vec3 v1 = vertices[matchToInt(results[1]) - 1];
 
-				Vec3 v2 = vertices[std::stoi(results[2]) - 1];
+				Vec3 v2 = vertices[matchToInt(results[2]) - 1];
 
-				Vec3 v3 = vertices[std::stoi(results[3]) - 1];
+				Vec3 v3 = vertices[matchToInt(results[3]) - 1];
 
 				objects->push_back(std::make_shared<Triangle>(v1, v2, v3, mtlcolor));
 			}
 			else if (std::regex_search(line, results, v_vt)) {
-				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
-				Vec2 vt1 = vertices_t[std::stoi(results[2]) - 1];
+				Vec3 v1 = vertices[matchToInt(results[1]) - 1];
+				Vec2 vt1 = vertices_t[matchToInt(results[2]) - 1];
 
-				Vec3 v2 = vertices[std::stoi(results[3]) - 1];
-				Vec2 vt2 = vertices_t[std::stoi(results[4]) - 1];
+				Vec3 v2 = vertices[matchToInt(results[3]) - 1];
+				Vec2 vt2 = vertices_t[matchToInt(results[4]) - 1];
 
-				Vec3 v3 = vertices[std::stoi(results[5]) - 1];
-				Vec2 vt3 = vertices_t[std::stoi(results[6]) - 1];
+				Vec3 v3 = vertices[matchToInt(results[5]) - 1];
+				Vec2 vt3 = vertices_t[matchToInt(results[6]) - 1];
 
 				objects->push_back(std::make_shared<Triangle>(v1,v2,v3,vt1,vt2,vt3,mtlcolor, currentTexture));
 			}
 			else if (std::regex_search(line, results, v_vn)) {
-				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
-				Vec3 vn1 = vertices_n[std::stoi(results[2]) - 1];
+				Vec3 v1 = vertices[matchToInt(results[1]) - 1];
+				Vec3 vn1 = vertices_n[matchToInt(results[2]) - 1];
 
-				Vec3 v2 = vertices[std::stoi(results[3]) - 1];
-				Vec3 vn2 = vertices_n[std::stoi(results[4]) - 1];
+				Vec3 v2 = vertices[matchToInt(results[3]) - 1];
+				Vec3 vn2 = vertices_n[matchToInt(results[4]) - 1];
 
-				Vec3 v3 = vertices[std::stoi(results[5]) - 1];
-				Vec3 vn3 = vertices_n[std::stoi(results[6]) - 1];
+				Vec3 v3 = vertices[matchToInt(results[5]) - 1];
+				Vec3 vn3 = vertices_n[matchToInt(results[6]) - 1];
 
 				objects->push_back(std::make_shared<Triangle>(v1, v2, v3, vn1, vn2, vn3, mtlcolor));
 			}
 			else if (std::regex_search(line, results, v_vt_vn)) {
-				Vec3 v1 = vertices[std::stoi(results[1]) - 1];
-				Vec2 vt1 = vertices_t[std::stoi(results[2]) - 1];
-				Vec3 vn1 = vertices_n[std::stoi(results[3]) - 1];
+				Vec3 v1 = vertices[matchToInt(results[1]) - 1];
+				Vec2 vt1 = vertices_t[matchToInt(results[2]) - 1];
+				Vec3 vn1 = vertices_n[matchToInt(results[3]) - 1];
 
-				Vec3 v2 = vertices[std::stoi(results[4]) - 1];
-				Vec2 vt2 = vertices_t[std::stoi(results[5]) - 1];
-				Vec3 vn2 = vertices_n[std::stoi(results[6]) - 1];
+				Vec3 v2 = vertices[matchToInt(results[4]) - 1];
+				Vec2 vt2 = vertices_t[matchToInt(results[5]) - 1];
+				Vec3 vn2 = vertices_n[matchToInt(results[6]) - 1];
 
-				Vec3 v3 = vertices[std::stoi(results[7]) - 1];
-				Vec2 vt3 = vertices_t[std::stoi(results[8]) - 1];
-				Vec3 vn3 = vertices_n[std::stoi(results[9]) - 1];
+				Vec3 v3 = vertices[matchToInt(results[7]) - 1];
+				Vec2 vt3 = vertices_t[matchToInt(results[8]) - 1];
+				Vec3 vn3 = vertices_n[matchToInt(results[9]) - 1];
 
 				objects->push_back(std::make_shared<Triangle>(v1, v2, v3, vt1, vt2, vt3, vn1, vn2, vn3, mtlcolor, currentTexture));
 
