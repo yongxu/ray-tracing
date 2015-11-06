@@ -10,7 +10,7 @@ imsize 300 300
 bkgcolor .6 .9 1
 
 
-mtlcolor .7 .7 .7  1 1 1  0.3 0.3 0.9  20  1 .4
+mtlcolor .7 .7 .7  1 1 1  0.3 0.3 0.9  20  1 1
 
 
 v -1 0 4
@@ -51,16 +51,16 @@ f 6//2 8//1 7//1
 
 
 
-mtlcolor .7 .2 .15  1 1 1  0.2 0.8 0  20  1 1.3
+mtlcolor .7 .2 .15  1 1 1  0.2 0.8 0  20  1 1
 
 f 9 8 7
 f 8 9 10
 
 
 
-mtlcolor 1 1 1  1 1 1  0.1 0.1 .9  20  1 1.25
+mtlcolor 1 1 1  1 1 1  0.4 0.3 .9  20  1 1
 
-texture grass1.ppm
+texture cat.ppm
 
 f 11/1 12/2 13/3
 
@@ -81,7 +81,7 @@ vt 0 0
 
 
 
-texture bricks1.ppm
+texture cat.ppm
 
 f 14/4 17/6 15/7
 f 14/4 16/5 17/6
@@ -93,14 +93,31 @@ f 14/5 19/7 18/4
 
 
 
-mtlcolor 1 1 1  1 1 1  0 0 0.9  20  1 .2
+mtlcolor 1 1 1  1 1 1  0 0 0.9  20  1 1.2
 
 sphere 4 .7 2.6 0.7
 
+mtlcolor 1 .1 .1  .6 .1 .1  0.4 0.7 0.5  20  0.7 1.2
+
+sphere 6 .7 4 0.7
 
 
+mtlcolor 1 1 1  1 1 1  0.0 0.7 0.2  20  0.2 1.4
 
-mtlcolor 1 1 1  1 1 1  .9 .2 0  20  1 1.25
+sphere 6 3 4 0.8
+
+
+mtlcolor 0 0 0  0 0 0  0 0 0.2  20  0 1.25
+
+sphere 5.5 1 7 0.7
+
+
+mtlcolor 0 0 0  0 0 0  0 0 0.2  20  0 1.8
+
+sphere 3.5 2.7 6.5 0.4
+
+
+mtlcolor 1 1 1  1 1 1  .9 .2 0  20  1 1.5
 
 texture sky1.ppm
 

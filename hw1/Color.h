@@ -67,6 +67,18 @@ struct Color {
 			b > 1.0f ? 1.0f : b
 		};
 	}
+
+	inline Color normalize() {
+		float max = r > g ? r >b ? r : b : g > b? g : b;
+		if (max > 1.0f)
+			return{
+				r / max,
+				g / max,
+				b / max
+		};
+		else
+			return *this;
+	}
 };
 
 struct MaterialColor

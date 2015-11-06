@@ -36,7 +36,7 @@ private:
 	Vec3 ul, ur, ll, lr;
 	//unit vector along view
 	Vec3 u, v;
-	Color traceRay(const Ray& ray, int iteration = 0);
+	Color traceRay(const Ray& ray, float refractionIndex = 1, int iteration = 0);
 
 };
 

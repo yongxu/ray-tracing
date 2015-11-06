@@ -43,7 +43,7 @@ Scene::~Scene()
 	delete[] view;
 }
 
-Color Scene::traceRay(const Ray& ray, int iteration)
+Color Scene::traceRay(const Ray& ray, float refractionIndex, int iteration)
 {
 	//normalize ray
 	float min_t = std::numeric_limits<float>::max();
@@ -92,11 +92,20 @@ Color Scene::traceRay(const Ray& ray, int iteration)
 		L += light->color*(diffuse + specular);
 	}
 	if (iteration) {
-		Color R = traceRay(Ray{ v.dir.reflect(n) , v.pos }, iteration -1);
+		//reflection
+		Color R = traceRay(Ray{ v.dir.reflect(n) , v.pos }, refractionIndex, iteration -1);
 		float cos_theta = std::fmax(0.f, v.dir*n);
-		float F_r = eta + (1 - eta)*std::pow(1.0f - cos_theta, 5.0f);
+		float F_0 = std::pow((eta- refractionIndex)/ (eta + refractionIndex),2);
+		float F_r = F_0 + (1 - F_0)*std::pow(1.0f - cos_theta, 5.0f);
 		//std::cout << eta <<" " << cos_theta << " " << "\n";
-		L += R * F_r;
+		L += R.normalize() * F_r;
+
+		//refrection
+		if (alpha >= 0 && alpha <= 1.0) {
+			Vec3 T = (-n)*std::sqrt(1 - std::pow(refractionIndex / eta, 2)*(1 - cos_theta*cos_theta))
+				+ (n*cos_theta - v.dir)*(refractionIndex / eta);
+			L += traceRay(Ray{ T , v.pos }, eta, iteration - 1)*(1-F_r)*(1-alpha);
+		}
 	}
 	return L;
 }
@@ -119,7 +128,7 @@ Color * Scene::render()
 				//calculate ray vector, from eye to view
 				Vec3 ray = p - eye;
 				//trace ray to find pixel color
-				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye }, rayBounceTimes).clamp();
+				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye }, 1.0, rayBounceTimes).clamp();
 			}
 		}
 	}
