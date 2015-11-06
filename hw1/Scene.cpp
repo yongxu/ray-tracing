@@ -102,7 +102,7 @@ Color Scene::traceRay(const Ray& ray, float refractionIndex, int iteration)
 
 		//refrection
 		if (alpha >= 0 && alpha <= 1.0) {
-			Vec3 T = (-n)*std::sqrt(1 - std::pow(refractionIndex / eta, 2)*(1 - cos_theta*cos_theta))
+			Vec3 T = (-n)*std::sqrt(1.0f - std::pow(refractionIndex / eta, 2)*(1 - cos_theta*cos_theta))
 				+ (n*cos_theta - v.dir)*(refractionIndex / eta);
 			L += traceRay(Ray{ T , v.pos }, eta, iteration - 1)*(1-F_r)*(1-alpha);
 		}
