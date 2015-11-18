@@ -79,7 +79,7 @@ struct Vec2
 	}
 };
 
-using Point = Vec3;
+//using Point = Vec3;
 
 struct Color {
 	union {
