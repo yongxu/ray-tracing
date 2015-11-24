@@ -3,7 +3,7 @@
 class Scene
 {
 public:
-	Scene(const Parser &p):Scene(p, 1, 2) {} //default pixels_per_unit
+	Scene(const Parser &p):Scene(p, 1, 3) {} //default pixels_per_unit
 	Scene(const Parser &, const float, const int rayBounceTimes);
 	~Scene();
 
@@ -36,7 +36,7 @@ private:
 	Vec3 ul, ur, ll, lr;
 	//unit vector along view
 	Vec3 u, v;
-	Color traceRay(const Ray& ray, float refractionIndex = 1, int iteration = 0);
+	Color traceRay(const Ray& ray, float refractionIndex = 1, int iteration = 0, Shape * from = nullptr);
 
 };
 

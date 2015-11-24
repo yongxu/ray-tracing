@@ -43,12 +43,14 @@ Scene::~Scene()
 	delete[] view;
 }
 
-Color Scene::traceRay(const Ray& ray, float refractionIndex, int iteration)
+Color Scene::traceRay(const Ray& ray, float refractionIndex, int iteration, Shape * from)
 {
 	//normalize ray
 	float min_t = std::numeric_limits<float>::max();
 	Shape *closest = nullptr;
 	for (auto shape : *objects) {
+		if (shape.get() == from)
+			continue;
 		float t = shape->hit(ray);
 		if (t > 0 && t < min_t) {
 			min_t = t;
@@ -76,7 +78,7 @@ Color Scene::traceRay(const Ray& ray, float refractionIndex, int iteration)
 		Vec3 l = light->direction(v.pos);
 		bool shadow = false;
 		for (auto shape : *objects) {
-			if (shape.get() == closest)
+			if (shape.get() == closest || shape.get() == from)
 				continue;
 			float t = shape->hit(Ray{l,v.pos});
 			if (light->isBlocked(v.pos,l,t)) {
@@ -93,21 +95,21 @@ Color Scene::traceRay(const Ray& ray, float refractionIndex, int iteration)
 	}
 	if (iteration) {
 		//reflection
-		Color R = traceRay(Ray{ v.dir.reflect(n) , v.pos }, refractionIndex, iteration -1);
-		float cos_theta = std::fmax(0.f, v.dir*n);
+		Color R = traceRay(Ray{ v.dir.reflect(n) , v.pos }, refractionIndex, iteration -1, closest);
+		float cos_theta = std::fmax(0.0f, v.dir*n);
 		float F_0 = std::pow((eta- refractionIndex)/ (eta + refractionIndex),2);
 		float F_r = F_0 + (1 - F_0)*std::pow(1.0f - cos_theta, 5.0f);
-		//std::cout << eta <<" " << cos_theta << " " << "\n";
-		L += R.normalize() * F_r;
+//		std::cout << F_0 <<" " << F_r << " " << "\n";
+		L += R * F_r;
 
 		//refrection
-		if (alpha >= 0 && alpha <= 1.0) {
+		if (alpha >= 0 && alpha < 1.0) {
 			Vec3 T = (-n)*static_cast<float>(std::sqrt(1.0f - std::pow(refractionIndex / eta, 2)*(1 - cos_theta*cos_theta)))
 				+ (n*cos_theta - v.dir)*(refractionIndex / eta);
-			L += traceRay(Ray{ T , v.pos }, eta, iteration - 1)*(1-F_r)*(1-alpha);
+			L += traceRay(Ray{ T , v.pos }, eta, iteration - 1, closest)*(1-F_r)*(1-alpha);
 		}
 	}
-	return L;
+	return L.clamp();
 }
 
 Color * Scene::render()
@@ -128,7 +130,7 @@ Color * Scene::render()
 				//calculate ray vector, from eye to view
 				Vec3 ray = p - eye;
 				//trace ray to find pixel color
-				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye }, 1.0, rayBounceTimes).clamp();
+				view[j*height + i] = traceRay(Ray{ ray.normlize(),eye }, 1.0, rayBounceTimes);
 			}
 		}
 	}

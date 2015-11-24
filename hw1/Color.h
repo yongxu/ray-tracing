@@ -62,9 +62,9 @@ struct Color {
 	}
 	inline Color clamp() {
 		return{
-			r > 1.0f ? 1.0f : r,
-			g > 1.0f ? 1.0f : g,
-			b > 1.0f ? 1.0f : b
+			r > 1.0f ? 1.0f : r < 0.0f ? 0.0f : r,
+			g > 1.0f ? 1.0f : g < 0.0f ? 0.0f : g,
+			b > 1.0f ? 1.0f : b < 0.0f ? 0.0f : b
 		};
 	}
 
